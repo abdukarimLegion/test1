@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Kredit Hisoblash Natijalari</title>
+</head>
+<body>
+<h1>Kredit Hisoblash Natijalari</h1>
+
+<p>Kredit summasi: <span th:text="${#numbers.formatDecimal(creditAmount, 1, 'COMMA', 2, 'POINT')}">0</span> so'm</p>
+<p>Yillik foiz stavkasi: <span th:text="${#numbers.formatDecimal(annualRate, 1, 'COMMA', 2, 'POINT')}">0</span>%</p>
+<p>Kredit muddati: <span th:text="${amountMonth}">0</span> oy</p>
+
+<table border="1">
+    <thead>
+    <tr>
+        <th>Oy</th>
+        <th>Asosiy to'lov (so'm)</th>
+        <th>Foiz to'lovi (so'm)</th>
+        <th>Umumiy to'lov (so'm)</th>
+        <th>Qolgan kredit (so'm)</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="payment : ${payments}">
+        <td th:text="${payment.month}">1</td>
+        <td th:text="${#numbers.formatDecimal(payment.totalSum, 1, 'COMMA', 2, 'POINT')}">1000000</td>
+        <td th:text="${#numbers.formatDecimal(payment.interestPayment, 1, 'COMMA', 2, 'POINT')}">83333.33</td>
+        <td th:text="${#numbers.formatDecimal(payment.totalPayment, 1, 'COMMA', 2, 'POINT')}">1083333.33</td>
+        <td th:text="${#numbers.formatDecimal(payment.remainingLoan, 1, 'COMMA', 2, 'POINT')}">9000000</td>
+    </tr>
+    </tbody>
+</table>
+
+<br>
+<a href="/kredit">Yangi hisoblash</a>
+</body>
+</html>
