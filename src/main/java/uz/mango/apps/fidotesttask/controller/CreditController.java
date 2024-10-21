@@ -20,7 +20,8 @@ public class CreditController {
     }
 
     @GetMapping("/kredit")
-    public String creditForm() {
+    public String creditForm(Model model) {
+        model.addAttribute("result", null);
         return "index";
     }
 
@@ -46,16 +47,18 @@ public class CreditController {
             }
 
             model.addAttribute("payments", creditDetails);
+            model.addAttribute("result", true);
             model.addAttribute("creditAmount", creditAmountVal);
             model.addAttribute("annualRate", annualRateVal);
             model.addAttribute("amountMonth", amountMonthVal);
             model.addAttribute("calculationType", calculationType);
 
-            return "result";
+            return "index";
 
         } catch (NumberFormatException e) {
             model.addAttribute("error", "Xato kiritdingiz. Iltimos, faqat son kiriting.");
             return "index";
         }
     }
+
 }
