@@ -1,42 +1,179 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Kredit Hisoblash</title>
+  <meta charset="UTF-8">
+  <title>Kredit Hisoblash</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f4f4f4;
+    }
+
+    h1 {
+      color: #333;
+      text-align: center;
+    }
+
+    form {
+      background: #fff;
+      border-radius: 5px;
+      padding: 20px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+      color: #555;
+    }
+
+    input[type="number"],
+    select {
+      width: 100%;
+      height: 50px;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+
+    button {
+      width: 100%;
+      height: 50px;
+      padding: 10px;
+      background-color: #5cb85c;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #4cae4c;
+    }
+
+    #spinner {
+      text-align: center;
+      font-size: 18px;
+      color: #5cb85c;
+    }
+
+    h2 {
+      color: #333;
+      text-align: center;
+      margin-top: 30px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    th, td {
+      padding: 10px;
+      text-align: center;
+      border: 1px solid #ccc;
+    }
+
+    th {
+      background-color: #f2f2f2;
+      font-weight: bold;
+    }
+
+    td {
+      background-color: #ffffff;
+    }
+
+    a {
+      display: block;
+      text-align: center;
+      margin-top: 20px;
+      text-decoration: none;
+      color: #007bff;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
 </head>
 <body>
-<h1>Kredit Hisoblash Formasi</h1>
+<h1>Kredit Hisoblash</h1>
+
 <form action="/kreditHisoblash" method="post">
-    <label for="creditAmount">Kredit summasi (so'm):</label>
-    <input type="number" id="creditAmount" name="creditAmount" required><br><br>
 
-    <label for="annualRate">Yillik foiz stavkasi (%):</label>
-    <input type="number" id="annualRate" name="annualRate" step="0.01" required><br><br>
+  <label for="creditAmount">Kredit summasi (so'm):</label>
+  <input type="number" id="creditAmount" name="creditAmount" required
+         th:value="${creditAmount != null ? creditAmount : ''}" placeholder="Masalan, 1000000"><br><br>
 
-    <label for="amountMonth">Kredit muddati (oy):</label>
-    <input type="number" id="amountMonth" name="amountMonth" required><br><br>
+  <label for="annualRate">Yillik foiz stavkasi (%):</label>
+  <input type="number" id="annualRate" name="annualRate" step="0.01" required
+         th:value="${annualRate != null ? annualRate : ''}" placeholder="Masalan, 15.5"><br><br>
 
-    <label for="calculationType">Hisoblash turini tanlang:</label>
-    <select id="calculationType" name="calculationType">
-        <option value="oddiy" selected>Oddiy</option>
-        <option value="annuitet">Annuitet</option>
-    </select><br><br>
+  <label for="amountMonth">Kredit muddati (oy):</label>
+  <input type="number" id="amountMonth" name="amountMonth" required
+         th:value="${amountMonth != null ? amountMonth : ''}" placeholder="Masalan, 12"><br><br>
 
-    <button type="submit">Hisoblash</button>
+  <label for="calculationType">Hisoblash turini tanlang:</label>
+  <select id="calculationType" name="calculationType">
+    <option value="oddiy" th:selected="${calculationType == 'oddiy'}">Oddiy</option>
+    <option value="annuitet" th:selected="${calculationType == 'annuitet'}">Annuitet</option>
+  </select><br><br>
 
-    <div id="spinner" style="display:none;">
-        <p>Hisoblanmoqda...</p>
-    </div>
+  <button type="submit">Hisoblash</button>
+
+  <div id="spinner" style="display:none;">
+    <p>Hisoblanmoqda...</p>
+  </div>
 </form>
 
+<div th:if="${result != null}">
+  <h2>Kredit Hisoblash Natijalari</h2>
+
+  <p>Kredit summasi: <span th:text="${#numbers.formatDecimal(creditAmount, 1, 'COMMA', 2, 'POINT')}">0</span> so'm</p>
+  <p>Yillik foiz stavkasi: <span th:text="${#numbers.formatDecimal(annualRate, 1, 'COMMA', 2, 'POINT')}">0</span>%</p>
+  <p>Kredit muddati: <span th:text="${amountMonth}">0</span> oy</p>
+  <p>Hisoblash turi: <span th:text="${calculationType}">Oddiy</span></p>
+
+  <table>
+    <thead>
+    <tr>
+      <th>Oy</th>
+      <th>Asosiy to'lov (so'm)</th>
+      <th>Foiz to'lovi (so'm)</th>
+      <th>Umumiy to'lov (so'm)</th>
+      <th>Qolgan kredit (so'm)</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="payment : ${payments}">
+      <td th:text="${payment.month}">1</td>
+      <td th:text="${#numbers.formatDecimal(payment.totalSum, 1, 'COMMA', 2, 'POINT')}">1000000</td>
+      <td th:text="${#numbers.formatDecimal(payment.interestPayment, 1, 'COMMA', 2, 'POINT')}">83333.33</td>
+      <td th:text="${#numbers.formatDecimal(payment.totalPayment, 1, 'COMMA', 2, 'POINT')}">1083333.33</td>
+      <td th:text="${#numbers.formatDecimal(payment.remainingLoan, 1, 'COMMA', 2, 'POINT')}">9000000</td>
+    </tr>
+    </tbody>
+  </table>
+  <a href="/kredit">Yangi hisoblash</a>
+
+</div>
+
 <script>
-    const form = document.querySelector('form');
-    const spinner = document.getElementById('spinner');
+  const form = document.querySelector('form');
+  const spinner = document.getElementById('spinner');
 
-    form.addEventListener('submit', function () {
-        spinner.style.display = 'block'; // Spinnerni ko'rsatish
-    });
+  form.addEventListener('submit', function () {
+    spinner.style.display = 'block';
+  });
 </script>
-
 </body>
 </html>
