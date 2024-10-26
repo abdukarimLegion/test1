@@ -103,6 +103,34 @@
     a:hover {
       text-decoration: underline;
     }
+
+    /* Mobil qurilmalar uchun responsive qilish uchun foydalaniladi*/
+    @media (max-width: 600px) {
+      body {
+        padding: 10px;
+      }
+
+      form {
+        padding: 15px;
+        box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      input[type="number"],
+      select,
+      button {
+        height: 45px;
+        font-size: 14px;
+      }
+
+      h1, h2 {
+        font-size: 24px;
+      }
+
+      table, th, td {
+        font-size: 12px;
+        padding: 5px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -164,7 +192,6 @@
     </tbody>
   </table>
   <a href="/kredit">Yangi hisoblash</a>
-
 </div>
 
 <script>
