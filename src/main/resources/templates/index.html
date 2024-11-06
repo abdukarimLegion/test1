@@ -137,7 +137,6 @@
 <h1>Kredit Hisoblash</h1>
 
 <form action="/kreditHisoblash" method="post">
-
   <label for="creditAmount">Kredit summasi (so'm):</label>
   <input type="number" id="creditAmount" name="creditAmount" required
          th:value="${creditAmount != null ? creditAmount : ''}" placeholder="Masalan, 1000000"><br><br>
@@ -192,6 +191,11 @@
     </tbody>
   </table>
   <a href="/kredit">Yangi hisoblash</a>
+</div>
+
+<div style="margin-top: 50px; text-align: center;">
+  <h2>Dasturchilar uchun API Doc</h2>
+  <p><a href="/swagger-ui/index.html">Kredit Hisoblash API Hujjati</a></p>
 </div>
 
 <script>
