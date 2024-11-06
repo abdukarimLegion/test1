@@ -103,13 +103,40 @@
     a:hover {
       text-decoration: underline;
     }
+
+    /* Mobil qurilmalar uchun responsive qilish uchun foydalaniladi*/
+    @media (max-width: 600px) {
+      body {
+        padding: 10px;
+      }
+
+      form {
+        padding: 15px;
+        box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      input[type="number"],
+      select,
+      button {
+        height: 45px;
+        font-size: 14px;
+      }
+
+      h1, h2 {
+        font-size: 24px;
+      }
+
+      table, th, td {
+        font-size: 12px;
+        padding: 5px;
+      }
+    }
   </style>
 </head>
 <body>
 <h1>Kredit Hisoblash</h1>
 
 <form action="/kreditHisoblash" method="post">
-
   <label for="creditAmount">Kredit summasi (so'm):</label>
   <input type="number" id="creditAmount" name="creditAmount" required
          th:value="${creditAmount != null ? creditAmount : ''}" placeholder="Masalan, 1000000"><br><br>
@@ -164,7 +191,11 @@
     </tbody>
   </table>
   <a href="/kredit">Yangi hisoblash</a>
+</div>
 
+<div style="margin-top: 50px; text-align: center;">
+  <h2>Dasturchilar uchun API Doc</h2>
+  <p><a href="/swagger-ui/index.html">Kredit Hisoblash API Hujjati</a></p>
 </div>
 
 <script>
