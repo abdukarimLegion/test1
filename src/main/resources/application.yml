@@ -4,3 +4,9 @@ spring:
    port: 8080
   application:
     name : "FidoTestTask"
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
